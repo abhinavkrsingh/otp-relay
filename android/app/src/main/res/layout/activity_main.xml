@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F1F5F9">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- ── Header ───────────────────────────────────────────── -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔐 OTP Relay"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#0F172A"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Auto-forward OTPs to Telegram"
+            android:textSize="14sp"
+            android:textColor="#64748B"
+            android:layout_marginBottom="28dp" />
+
+        <!-- ── Status card ──────────────────────────────────────── -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:elevation="1dp"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="STATUS"
+                android:textSize="10sp"
+                android:textColor="#94A3B8"
+                android:letterSpacing="0.12"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Checking…"
+                android:textSize="15sp"
+                android:textColor="#64748B" />
+        </LinearLayout>
+
+        <!-- ── Config section ───────────────────────────────────── -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CONFIGURATION"
+            android:textSize="10sp"
+            android:textColor="#94A3B8"
+            android:letterSpacing="0.12"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Vercel API URL -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vercel API URL"
+            android:textSize="13sp"
+            android:textColor="#334155"
+            android:layout_marginBottom="6dp" />
+
+        <EditText
+            android:id="@+id/et_api_url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="https://your-app.vercel.app/api/relay"
+            android:inputType="textUri"
+            android:padding="12dp"
+            android:background="#FFFFFF"
+            android:textSize="13sp"
+            android:textColor="#0F172A"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Secret Key -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Secret Key"
+            android:textSize="13sp"
+            android:textColor="#334155"
+            android:layout_marginBottom="6dp" />
+
+        <EditText
+            android:id="@+id/et_secret_key"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Shared secret from .env"
+            android:inputType="textPassword"
+            android:padding="12dp"
+            android:background="#FFFFFF"
+            android:textSize="13sp"
+            android:textColor="#0F172A"
+            android:layout_marginBottom="16dp" />
+
+        <!-- My Phone Number -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Phone Number"
+            android:textSize="13sp"
+            android:textColor="#334155"
+            android:layout_marginBottom="6dp" />
+
+        <EditText
+            android:id="@+id/et_my_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="+91XXXXXXXXXX"
+            android:inputType="phone"
+            android:padding="12dp"
+            android:background="#FFFFFF"
+            android:textSize="13sp"
+            android:textColor="#0F172A"
+            android:layout_marginBottom="28dp" />
+
+        <!-- Save button -->
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save &amp; Enable"
+            android:textSize="15sp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#2563EB"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp" />
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Required to receive incoming SMS -->
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <!-- Required to call the Vercel API -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.OtpRelay">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--
+            android:exported="true" is required on API 31+ for receivers with intent-filters.
+            SMS_RECEIVED is a protected broadcast — only the system can send it,
+            so exporting this receiver is safe.
+        -->
+        <receiver
+            android:name=".SmsReceiver"
+            android:exported="true">
+            <intent-filter android:priority="999">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>
