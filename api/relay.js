@@ -87,7 +87,7 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: "Unknown from phone number" });
   }
 
-  const tgText = `🔐 <b>OTP from ${sender || "Unknown"}</b>\n\n<code>${otp}</code>`;
+  const tgText = `🔐 <b>OTP from ${sender || "Unknown"}</b>\n\n<code>${otp}</code>\n\n📩 <i>${message}</i>`;
 
   try {
     await sendTelegram(targetChatId, tgText);
