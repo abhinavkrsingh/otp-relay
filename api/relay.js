@@ -7,7 +7,7 @@
 // Nothing is stored — fire and forget.
 
 const OTP_KEYWORD_REGEX =
-  /\b(otp|one[\s\-]?time|passcode|verification[\s\-]?code|verif[iy]|auth(?:entication)?[\s\-]?code|2fa|two[\s\-]?factor|login[\s\-]?code|security[\s\-]?code|expir[ey][sd]?|do not share|access[\s\-]?code|temporary[\s\-]?code|your code|use.*code|enter.*code)\b/i;
+  /\b(otp|one[\s\-]?time|passcode|verification[\s\-]?code|verif[iy]|auth(?:entication)?[\s\-]?code|2fa|two[\s\-]?factor|login[\s\-]?code|security[\s\-]?code|expir[ey][sd]?|do not share|access[\s\-]?code|temporary[\s\-]?code|your code|use.*code|enter.*code|secret[\s\-]?(?:code|password|key)|temp(?:orary)?[\s\-]?password|pin|token|confirm(?:ation)?[\s\-]?code|activation[\s\-]?code|reset[\s\-]?(?:code|password)|transaction[\s\-]?(?:otp|code|pin)|authoriz(?:e|ation)[\s\-]?code|valid(?:ate|ation)[\s\-]?code)\b/i;
 
 function extractOtp(text) {
   if (!OTP_KEYWORD_REGEX.test(text)) return null;

@@ -22,7 +22,14 @@ class SmsReceiver : BroadcastReceiver() {
             "login code", "security code",
             "expires", "do not share",
             "access code", "temporary code",
-            "your code", "use code", "enter code"
+            "your code", "use code", "enter code",
+            "secret code", "secret password", "secret key",
+            "temp password", "temporary password",
+            "pin", "token",
+            "confirmation code", "confirm code",
+            "activation code", "reset code", "reset password",
+            "transaction otp", "transaction code", "transaction pin",
+            "authorization code", "validation code"
         )
 
         fun looksLikeOtp(message: String): Boolean {
