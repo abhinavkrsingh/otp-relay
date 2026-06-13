@@ -2,7 +2,9 @@ package com.otprelay
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -22,7 +24,14 @@ class MainActivity : AppCompatActivity() {
 
     private val requestSmsPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
-    ) { granted -> updateStatus(granted) }
+    ) { granted ->
+        if (granted) requestNotificationPermission()
+        else updateStatus(smsGranted = false)
+    }
+
+    private val requestNotificationPermission = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { _ -> startRelayService(); updateStatus(smsGranted = true) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,25 +44,48 @@ class MainActivity : AppCompatActivity() {
         tvStatus    = findViewById(R.id.tv_status)
 
         loadConfig()
-        checkPermission()
+        checkPermissions()
 
         btnSave.setOnClickListener {
             if (validateInputs()) {
                 saveConfig()
-                checkPermission()
+                checkPermissions()
             }
         }
     }
 
-    // ── Permission ─────────────────────────────────────────────────────────────
+    // ── Permissions ────────────────────────────────────────────────────────────
 
-    private fun checkPermission() {
-        val granted = ContextCompat.checkSelfPermission(
+    private fun checkPermissions() {
+        val smsGranted = ContextCompat.checkSelfPermission(
             this, Manifest.permission.RECEIVE_SMS
         ) == PackageManager.PERMISSION_GRANTED
 
-        if (granted) updateStatus(true)
-        else requestSmsPermission.launch(Manifest.permission.RECEIVE_SMS)
+        if (!smsGranted) {
+            requestSmsPermission.launch(Manifest.permission.RECEIVE_SMS)
+        } else {
+            requestNotificationPermission()
+        }
+    }
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val granted = ContextCompat.checkSelfPermission(
+                this, Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+            if (!granted) {
+                requestNotificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+                return
+            }
+        }
+        startRelayService()
+        updateStatus(smsGranted = true)
+    }
+
+    // ── Foreground service ─────────────────────────────────────────────────────
+
+    private fun startRelayService() {
+        startForegroundService(Intent(this, RelayForegroundService::class.java))
     }
 
     // ── Status display ─────────────────────────────────────────────────────────
@@ -108,21 +140,11 @@ class MainActivity : AppCompatActivity() {
         val phone  = etMyPhone.text.toString().trim()
 
         return when {
-            url.isEmpty() -> {
-                etApiUrl.error = "Required"; false
-            }
-            !url.startsWith("https://") -> {
-                etApiUrl.error = "Must start with https://"; false
-            }
-            secret.isEmpty() -> {
-                etSecretKey.error = "Required"; false
-            }
-            phone.isEmpty() -> {
-                etMyPhone.error = "Required"; false
-            }
-            !phone.startsWith("+") -> {
-                etMyPhone.error = "Use international format e.g. +919876543210"; false
-            }
+            url.isEmpty()              -> { etApiUrl.error    = "Required"; false }
+            !url.startsWith("https://")-> { etApiUrl.error    = "Must start with https://"; false }
+            secret.isEmpty()           -> { etSecretKey.error = "Required"; false }
+            phone.isEmpty()            -> { etMyPhone.error   = "Required"; false }
+            !phone.startsWith("+")     -> { etMyPhone.error   = "Use international format e.g. +919876543210"; false }
             else -> true
         }
     }
