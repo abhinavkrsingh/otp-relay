@@ -1,11 +1,11 @@
 name: Build Android APK
 
 on:
-  workflow_dispatch:              # run manually from GitHub UI
+  workflow_dispatch:
   push:
     branches: [main]
     paths:
-      - 'android/**'              # only rebuild when Android code changes
+      - 'android/**'
 
 jobs:
   build:
@@ -32,13 +32,37 @@ jobs:
         with:
           gradle-version: '8.2'
 
-      - name: Build Debug APK
+      # If KEYSTORE_B64 secret exists, use it. Otherwise generate one and print it
+      # so you can save it as a GitHub Secret (only needed once).
+      - name: Prepare signing keystore
+        run: |
+          if [ -n "${{ secrets.KEYSTORE_B64 }}" ]; then
+            echo "${{ secrets.KEYSTORE_B64 }}" | base64 -d > android/app/release.jks
+            echo "Using saved keystore from secret."
+          else
+            keytool -genkey -v \
+              -keystore android/app/release.jks \
+              -alias otp-relay \
+              -keyalg RSA -keysize 2048 -validity 10000 \
+              -storepass otprelay123 -keypass otprelay123 \
+              -dname "CN=OTP Relay,O=Personal,C=IN" -noprompt
+            echo ""
+            echo "========== FIRST RUN: SAVE THIS AS GITHUB SECRET =========="
+            echo "Go to repo → Settings → Secrets → Actions → New secret"
+            echo "Name: KEYSTORE_B64"
+            echo "Value:"
+            base64 -w 0 android/app/release.jks
+            echo ""
+            echo "==========================================================="
+          fi
+
+      - name: Build signed APK
         working-directory: android
-        run: gradle assembleDebug
+        run: gradle assembleRelease
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: otp-relay-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          path: android/app/build/outputs/apk/release/app-release.apk
           retention-days: 30

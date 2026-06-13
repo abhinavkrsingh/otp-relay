@@ -46,6 +46,5 @@ class RelayForegroundService : Service() {
             .setContentText("Monitoring for OTPs…")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setOngoing(true)       // cannot be dismissed by user
-            .setSilent(true)
-            .build()
+            .build()                // silence handled by IMPORTANCE_LOW on the channel
 }

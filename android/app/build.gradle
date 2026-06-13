@@ -11,14 +11,23 @@ android {
         applicationId "com.otprelay"
         minSdk 26
         targetSdk 34
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("release.jks")
+            storePassword "otprelay123"
+            keyAlias "otp-relay"
+            keyPassword "otprelay123"
+        }
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            signingConfig signingConfigs.debug  // fine for personal sideloaded APK
+            signingConfig signingConfigs.release
         }
     }
 
